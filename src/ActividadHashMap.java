@@ -66,69 +66,69 @@ class ColeccionAlumnos{
 		this.mapAlumnos = mapAlumnos;
 	}
 	
-	public static int validacionNatural() {
-		int ret = 0;
-		boolean err = false;
+	public static int validacionNum() {
+		int r = 0;
+		boolean error = false;
 		do {
 			try {
-				ret = entrada.nextInt();
+				r = entrada.nextInt();
 			} catch (java.util.InputMismatchException e) {
-				System.out.println("entrada no valida, intente de nuevo:");
+				System.out.println("Error, intente de nuevo:");
 				entrada.nextLine();
-				err=true;
+				error=true;
 			}
-			if (ret>0) {
-				err=false;
+			if (r>0) {
+				error=false;
 			}else {
-				System.out.println("solo números naturales");
-				err=true;
+				System.out.println("Solo ingrese números");
+				error=true;
 			}
-		}while(err);
-		return ret;
+		}while(error);
+		return r;
 	}
-	public static byte validacionNaturalb() {
-		return (byte)validacionNatural();
+	public static byte validacionNum2() {
+		return (byte)validacionNum();
 	}
 	public static String validacionCarrera() {
-		boolean err=false;
+		boolean error=false;
 		String carrera;
 		int i=0;
 		do {
 			if(i==0) {
-				System.out.println("carrera:");
+				System.out.println("Carrera:");
 			}
 			i++;
 			carrera = entrada.nextLine().toLowerCase();
 			if(carrera.contains("isc")||carrera.contains("iia")||carrera.contains("im")||carrera.contains("la")||carrera.contains("cp")){
-				err=false;
+				error=false;
 				
 			}else {
 				if(i!=1) {
-					System.out.println("no existe la carrera especificada, ingrese la carrera de nuevo");
+					System.out.println("No existe la carrera ingresada, intentelo de nuevo");
 				}
-				err=true;
+				error=true;
 			}
-		}while (err);
+		}while (error);
 		return carrera;
 	}
 	public static Calendar validacionFecha() {
-		int fch[]=new int[3];
-		boolean err=false;
+		int fech[]=new int[3];
+		boolean error=false;
 		do {
-			err=false;
-			System.out.println("fecha(dd/mm/aaaa):");
-			String entry = entrada.nextLine();
+			error=false;
+			System.out.println("Fecha(dd/mm/aaaa):");
+			String fecha = entrada.nextLine();
 			try {
-				fch[0]=Integer.parseInt(entry.substring(0,2));
-				fch[1]=Integer.parseInt(entry.substring(3,5))-1;
-				fch[2]=Integer.parseInt(entry.substring(6,10));
+				fech[0]=Integer.parseInt(fecha.substring(0,2));
+				fech[1]=Integer.parseInt(fecha.substring(3,5))-1;
+				fech[2]=Integer.parseInt(fecha.substring(6,10));
 			} catch (Exception e) {
-				System.out.println("entrada no valida, intente de nuevo");
-				err=true;
+				System.out.println("Fecha no valida, intente de nuevo");
+				error=true;
 			}
-		}while(err);
+		}while(error);
 		Calendar fecha = Calendar.getInstance();
-		fecha.set(fch[2], fch[1], fch[0]);
+		fecha.set(fech[2], fech[1], fech[0]);
 		return fecha;
 	}
 	
@@ -138,12 +138,13 @@ class ColeccionAlumnos{
 		Map<Integer, Alumno> mapAlumnos = new HashMap<Integer, Alumno>();
 		
 		for (int i = 0; i < cant; i++) {
+			entrada.nextLine(); //Después de terminar de registrar a un alumno se debe de dar enter. 
 			System.out.println("Alumno " + (i + 1));
 			System.out.println("Ingrese el nombre: ");
 			String nombre = entrada.nextLine();
 			System.out.println("Ingrese la edad: ");
 			byte edad; 
-			edad = ColeccionAlumnos.validacionNaturalb();
+			edad = ColeccionAlumnos.validacionNum2();
 			String carrera = ColeccionAlumnos.validacionCarrera();
 			Calendar fechaInsc = ColeccionAlumnos.validacionFecha();
 			Alumno al = new Alumno(nombre, edad, carrera, fechaInsc);
@@ -183,7 +184,7 @@ class ColeccionAlumnos{
 	}
 	
 	public void filtroFecha(Calendar fecha) {
-		System.out.println("Filtro de fecha: ");
+		System.out.println("Alumnos inscritos después de la fecha: ");
 		Map<Integer, Alumno> mapAlumnos = this.getMapAlumnos();
 		for (int i = 0; i < mapAlumnos.size(); i++) {
 			Alumno alTot = mapAlumnos.get(i);
@@ -194,7 +195,6 @@ class ColeccionAlumnos{
 			}
 		}
 	}
-	
 }
 
 public class ActividadHashMap {
@@ -205,8 +205,75 @@ public class ActividadHashMap {
 		Calendar fecha = Calendar.getInstance();
 		fecha.set(2016, 8, 10);
 		
-		coAl.llenarList(5);
-		coAl.vaciarList();
+		byte opcion = 0;
+		byte opcion2 = 0;
+		
+		do {
+			System.out.println("1- Llenar lista");
+			System.out.println("2- Vaciar lista");
+			System.out.println("3- Mostrar alumnos por carrera");
+			System.out.println("4- Calcular promedio de las edades");
+			System.out.println("5- Mostrar alumnos inscritos después de la fecha indicada (10/08/2016)");
+			System.out.println("6- Salir del menú");
+		opcion = ColeccionAlumnos.validacionNum2();
+		switch(opcion) {
+		case 1: 
+			coAl.llenarList(5);
+			break;
+		case 2:
+			coAl.vaciarList();
+			break;
+		case 3:
+			String carrera="";
+			do {
+			System.out.println("1- ISC");
+			System.out.println("2- IIA");
+			System.out.println("3- IM");
+			System.out.println("4- LA");
+			System.out.println("5- CP");
+			opcion2 = ColeccionAlumnos.validacionNum2();
+			switch (opcion2) {
+			case 1:
+				carrera="isc";
+				opcion2=6;
+				break;
+			case 2:
+				carrera="iia";
+				opcion2=6;
+				break;
+			case 3:
+				carrera="im";
+				opcion2=6;
+				break;
+			case 4:
+				carrera="la";
+				opcion2=6;
+				break;
+			case 5:
+				carrera="cp";
+				opcion2=6;
+				break;
+			default:
+				System.out.println("Opcion no valida");
+				opcion2=7;
+				break;
+				}
+			}while(opcion2!=6);
+			coAl.mostrarAlPorCarrera(carrera);
+			break;
+		case 4:
+			System.out.println("Promedio de edades: "+coAl.calcPromEdades());
+			break;
+		case 5:
+			coAl.filtroFecha(fecha);
+			break;
+		case 6:
+			break;
+		default:
+			System.out.println("Opcion no Valida");
+			break;
+		}
+	}while(opcion != 6);
 		
 
 	}
